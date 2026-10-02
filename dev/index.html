@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SORRIMED — Clínica Dentária em Lisboa | O seu sorriso, a nossa missão</title>
+<meta name="description" content="SORRIMED — Clínica Dentária em Lisboa. Mais de 20 anos de experiência em implantes, ortodontia, estética dentária e branqueamento. Marque a sua consulta." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============================================================
+     SORRIMED — Design tokens
+     ============================================================ */
+  :root {
+    /* Palette extracted from official facade signage */
+    --teal-deep: #052E40;        /* nav background, matches official logo bg */
+    --teal-petrol: #0A3540;      /* hero background */
+    --teal-mid: #114B5A;
+    --teal-light: #6BB5BD;       /* highlights, links */
+    --teal-pale: #9CC9D0;       /* icons */
+    --gold: #C9A876;            /* CTA buttons */
+    --gold-dark: #B08F5C;
+    --beige: #F5F0E8;           /* soft section bg */
+    --beige-deep: #EFE6D8;
+    --white: #FFFFFF;
+    --ink: #1B2B30;
+    --muted: rgba(255,255,255,.72);
+
+    /* Type */
+    --serif: 'Cormorant Garamond', 'Garamond', serif;
+    --sans:  'Montserrat', system-ui, -apple-system, sans-serif;
+
+    /* Layout */
+    --radius: 14px;
+    --radius-lg: 22px;
+    --shadow-sm: 0 2px 8px rgba(5,46,64,.08);
+    --shadow-md: 0 10px 30px rgba(5,46,64,.18);
+    --shadow-lg: 0 20px 60px rgba(5,46,64,.28);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--white);
+  }
+  img { max-width: 100%; display: block; }
+  a { color: var(--teal-light); text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; }
+
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Reveal-on-scroll */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.is-visible { opacity: 1; transform: none; }
+
+  /* ============================================================
+     NAVIGATION
+     ============================================================ */
+  .nav {
+    background: var(--teal-deep);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 56px; height: 56px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,.25));
+  }
+  .logo-text { display: flex; flex-direction: column; line-height: 1; }
+  .logo-name {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: .14em;
+    color: var(--white);
+  }
+  .logo-name b { font-weight: 600; color: var(--teal-pale); }
+  .logo-sub {
+    font-family: var(--sans);
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: .34em;
+    color: var(--teal-pale);
+    margin-top: 4px;
+    text-transform: uppercase;
+    position: relative;
+    padding: 0 14px;
+  }
+  .logo-sub::before, .logo-sub::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 18px;
+    height: 1px;
+    background: var(--teal-pale);
+    opacity: .7;
+  }
+  .logo-sub::before { left: -8px; }
+  .logo-sub::after  { right: -8px; }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+  }
+  .nav-links a {
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    transition: color .25s ease;
+    position: relative;
+  }
+  .nav-links a:not(.btn):hover { color: var(--teal-pale); }
+  .nav-links a:not(.btn)::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -6px;
+    width: 0; height: 2px;
+    background: var(--gold);
+    transition: width .3s ease;
+  }
+  .nav-links a:not(.btn):hover::after { width: 100%; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 26px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    transition: all .3s ease;
+    white-space: nowrap;
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--teal-deep);
+    box-shadow: 0 6px 18px rgba(201,168,118,.32);
+  }
+  .btn-gold:hover { background: var(--gold-dark); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(201,168,118,.42); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,.5);
+  }
+  .btn-outline:hover { border-color: var(--teal-pale); color: var(--teal-pale); }
+
+  .nav-toggle {
+    display: none;
+    background: transparent;
+    color: var(--white);
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero {
+    background: var(--teal-petrol);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+    padding: 90px 0 110px;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(800px 500px at 90% 20%, rgba(107,181,189,.18), transparent 60%),
+      radial-gradient(600px 400px at 0% 100%, rgba(156,201,208,.10), transparent 60%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--teal-pale);
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 38px;
+    height: 1px;
+    background: var(--teal-pale);
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(40px, 5.6vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 28px;
+    color: var(--white);
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--teal-pale);
+    font-weight: 400;
+  }
+  .hero p.lead {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 0 36px;
+  }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .hero-visual {
+    position: relative;
+  }
+  .hero-image-wrap {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    aspect-ratio: 4/5;
+    background: var(--teal-mid);
+  }
+  .hero-image-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+  .hero-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(5,46,64,.45) 100%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    position: absolute;
+    left: -22px;
+    bottom: 30px;
+    background: var(--white);
+    color: var(--teal-deep);
+    padding: 18px 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    max-width: 320px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero-badge-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--beige);
+    color: var(--gold-dark);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .hero-badge-text { font-size: 13px; line-height: 1.4; font-weight: 500; }
+  .hero-badge-text strong { display: block; font-size: 15px; font-weight: 700; color: var(--teal-deep); margin-bottom: 2px; }
+
+  /* ============================================================
+     SERVICES
+     ============================================================ */
+  .services {
+    background: var(--beige);
+    padding: 110px 0;
+  }
+  .section-head {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 64px;
+  }
+  .section-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 14px;
+    display: block;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(34px, 4.4vw, 54px);
+    line-height: 1.1;
+    color: var(--teal-deep);
+    margin: 0 0 18px;
+  }
+  .section-title em { font-style: italic; color: var(--teal-mid); }
+  .section-sub {
+    color: #4A5A60;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .service-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    transition: transform .35s ease, box-shadow .35s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(5,46,64,.04);
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 4px; height: 0;
+    background: var(--gold);
+    transition: height .4s ease;
+  }
+  .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+  .service-card:hover::before { height: 100%; }
+  .service-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: var(--beige);
+    color: var(--teal-light);
+    display: grid; place-items: center;
+    margin-bottom: 22px;
+    transition: background .3s ease, color .3s ease;
+  }
+  .service-card:hover .service-icon { background: var(--teal-deep); color: var(--teal-pale); }
+  .service-icon svg { width: 28px; height: 28px; }
+  .service-card h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--teal-deep);
+    margin: 0 0 10px;
+  }
+  .service-card p {
+    color: #4A5A60;
+    font-size: 14.5px;
+    line-height: 1.65;
+    margin: 0 0 18px;
+  }
+  .service-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    transition: gap .25s ease;
+  }
+  .service-link:hover { gap: 10px; color: var(--teal-deep); }
+
+  /* ============================================================
+     ABOUT
+     ============================================================ */
+  .about {
+    background: var(--white);
+    padding: 120px 0;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-image {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .about-image img { width: 100%; height: auto; min-height: 480px; object-fit: cover; }
+  .about-image-deco {
+    position: absolute;
+    inset: -22px -22px auto auto;
+    width: 80%;
+    height: 80%;
+    border: 2px solid var(--gold);
+    border-radius: var(--radius-lg);
+    z-index: -1;
+  }
+  .about-content .section-eyebrow { text-align: left; }
+  .about-content .section-title { text-align: left; }
+  .about-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #4A5A60;
+    margin: 24px 0 36px;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(5,46,64,.1);
+  }
+  .stat-num {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 48px;
+    color: var(--gold-dark);
+    line-height: 1;
+  }
+  .stat-num small { font-size: 24px; color: var(--teal-mid); margin-left: 2px; }
+  .stat-label {
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #4A5A60;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  /* ============================================================
+     CONTACT
+     ============================================================ */
+  .contact {
+    background: var(--teal-deep);
+    color: var(--white);
+    padding: 110px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(700px 400px at 90% 10%, rgba(107,181,189,.15), transparent 60%),
+      radial-gradient(500px 300px at 10% 90%, rgba(201,168,118,.08), transparent 60%);
+    pointer-events: none;
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: .95fr 1.05fr;
+    gap: 60px;
+    position: relative;
+  }
+  .contact .section-eyebrow { color: var(--gold); }
+  .contact .section-title { color: var(--white); }
+  .contact .section-title em { color: var(--teal-pale); }
+  .contact .section-sub { color: var(--muted); margin-bottom: 36px; }
+
+  .info-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 18px; }
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .info-item:last-child { border-bottom: none; }
+  .info-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.06);
+    color: var(--teal-pale);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .info-text-label {
+    font-size: 11px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--teal-pale);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .info-text-value {
+    font-size: 15px;
+    color: var(--white);
+    line-height: 1.5;
+  }
+  .info-text-value a { color: var(--white); transition: color .2s ease; }
+  .info-text-value a:hover { color: var(--gold); }
+
+  .form-card {
+    background: rgba(255,255,255,.04);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .field label {
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--teal-pale);
+    font-weight: 600;
+  }
+  .field input, .field textarea {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px;
+    color: var(--white);
+    padding: 13px 16px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color .25s ease, background .25s ease;
+    width: 100%;
+  }
+  .field input:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(255,255,255,.08);
+  }
+  .field textarea { min-height: 110px; resize: vertical; }
+  .form-submit { width: 100%; margin-top: 8px; padding: 15px; font-size: 13px; }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  .footer {
+    background: #03212F;
+    color: rgba(255,255,255,.7);
+    padding: 60px 0 24px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .footer-brand { color: var(--white); }
+  .footer-brand p { font-size: 14px; line-height: 1.65; margin: 18px 0 0; color: rgba(255,255,255,.6); }
+  .footer-heading {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--white);
+    margin: 0 0 18px;
+    letter-spacing: .04em;
+  }
+  .footer ul { list-style: none; padding: 0; margin: 0; }
+  .footer li { margin-bottom: 10px; }
+  .footer a {
+    color: rgba(255,255,255,.7);
+    font-size: 14px;
+    transition: color .2s ease;
+  }
+  .footer a:hover { color: var(--gold); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 24px;
+    font-size: 13px;
+  }
+  .socials { display: flex; gap: 10px; }
+  .social-link {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+    color: var(--teal-pale);
+    display: grid; place-items: center;
+    transition: background .25s ease, color .25s ease, transform .25s ease;
+  }
+  .social-link:hover { background: var(--gold); color: var(--teal-deep); transform: translateY(-2px); }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 960px) {
+    .hero { padding: 70px 0 90px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 50px; }
+    .hero-badge { left: 50%; transform: translateX(-50%); bottom: 18px; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .about-grid { grid-template-columns: 1fr; gap: 50px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 50px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .section-head { margin-bottom: 44px; }
+    .services, .about, .contact { padding: 80px 0; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--teal-deep); flex-direction: column; align-items: stretch; gap: 0; padding: 16px 0; border-top: 1px solid rgba(255,255,255,.08); }
+    .nav-links.is-open { display: flex; }
+    .nav-links a { padding: 12px 24px; }
+    .nav-toggle { display: block; background: transparent; color: var(--white); padding: 8px; }
+    .nav-links .btn { margin: 12px 24px 0; align-self: stretch; }
+    .services-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; gap: 22px; }
+    .stat-num { font-size: 40px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+    .footer-bottom { flex-direction: column; gap: 14px; }
+    .container { padding: 0 18px; }
+    .hero p.lead { font-size: 16px; }
+    .form-card { padding: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== NAV ============== -->
+<nav class="nav" id="top">
+  <div class="nav-inner">
+    <a href="#top" class="logo" aria-label="SORRIMED — Clínica Dentária">
+      <img class="logo-icon" src="../images/logo-official@2x.png" alt="" />
+      <span class="logo-text">
+        <span class="logo-name">SORRI<b>MED</b></span>
+        <span class="logo-sub">Clínica Dentária</span>
+      </span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#servicos">Serviços</a>
+      <a href="#clinica">A Clínica</a>
+      <a href="#contacto">Contacto</a>
+      <a href="#contacto" class="btn btn-gold">Marcar Consulta</a>
+    </div>
+    <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" id="navToggle">☰</button>
+  </div>
+</nav>
+
+<!-- ============== HERO ============== -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-text reveal">
+        <span class="hero-eyebrow">Clínica Dentária em Lisboa</span>
+        <h1>O seu sorriso,<br/><em>a nossa missão.</em></h1>
+        <p class="lead">
+          Há mais de duas décadas que cuidamos da saúde e da estética do sorriso dos nossos
+          pacientes com um acompanhamento personalizado, tecnologia de ponta e uma equipa
+          dedicada ao detalhe. Na SORRIMED, cada visita é um passo rumo a um sorriso mais
+          confiante e saudável.
+        </p>
+        <div class="hero-ctas">
+          <a href="#contacto" class="btn btn-gold">Marcar Consulta</a>
+          <a href="#servicos" class="btn btn-outline">Conhecer Serviços</a>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="hero-image-wrap">
+          <img src="../images/hero-smile.jpg" alt="Paciente SORRIMED a sorrir — clínica dentária em Lisboa" />
+        </div>
+        <div class="hero-badge">
+          <div class="hero-badge-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.4 7.2 16.9l.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+            </svg>
+          </div>
+          <div class="hero-badge-text">
+            <strong>+20 anos de experiência</strong>
+            Cuidando do seu sorriso com excelência
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============== SERVICES ============== -->
+<section class="services" id="servicos">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">Os Nossos Serviços</span>
+      <h2 class="section-title">Soluções completas para <em>todas as idades</em></h2>
+      <p class="section-sub">
+        Da prevenção à estética, oferecemos um acompanhamento integral em odontologia
+        familiar, sempre com a mesma exigência técnica e o cuidado humano que nos define.
+      </p>
+    </div>
+
+    <div class="services-grid">
+      <!-- Card 1 -->
+      <article class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3c-3 0-6 1-6 4 0 2 1 3 1 5s-1 3-1 5c0 3 2 4 3 4s2-2 3-5c1 3 2 5 3 5s3-1 3-4c0-2-1-3-1-5s1-3 1-5c0-3-3-4-6-4z"/>
+          </svg>
+        </div>
+        <h3>Implantes Dentários</h3>
+        <p>Substituição fixa e natural de dentes perdidos com implantes de última geração e taxas de sucesso superiores a 98%.</p>
+        <a href="#contacto" class="service-link">Saber mais →</a>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 8h16M4 12h16M4 16h10"/>
+          </svg>
+        </div>
+        <h3>Ortodontia</h3>
+        <p>Alinhadores invisíveis e aparelhos convencionais para corrigir a posição dos dentes em adultos e crianças.</p>
+        <a href="#contacto" class="service-link">Saber mais →</a>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l2.5 5 5.5.8-4 3.9 1 5.5L12 14.4 7 17.2l1-5.5-4-3.9 5.5-.8L12 2z"/>
+          </svg>
+        </div>
+        <h3>Estética Dentária</h3>
+        <p>Facetas, coroas e restaurações em cerâmica para um sorriso harmonioso, natural e luminoso.</p>
+        <a href="#contacto" class="service-link">Saber mais →</a>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <path d="M9 9h.01M15 9h.01"/>
+          </svg>
+        </div>
+        <h3>Branqueamento</h3>
+        <p>Clareamento profissional em consultório ou em casa, com resultados visíveis e duradouros em segurança.</p>
+        <a href="#contacto" class="service-link">Saber mais →</a>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v6m0 0l-3-3m3 3l3-3"/>
+            <path d="M5 14c0 4 3 6 7 6s7-2 7-6"/>
+          </svg>
+        </div>
+        <h3>Endodontia</h3>
+        <p>Tratamentos de canal indolores com microscopia dentária, preservando o dente natural sempre que possível.</p>
+        <a href="#contacto" class="service-link">Saber mais →</a>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="3"/>
+            <path d="M5 21c0-3.5 3-6 7-6s7 2.5 7 6"/>
+          </svg>
+        </div>
+        <h3>Odontopediatria</h3>
+        <p>Ambiente acolhedor e equipa especializada para a saúde oral dos mais novos, com prevenção desde cedo.</p>
+        <a href="#contacto" class="service-link">Saber mais →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ABOUT ============== -->
+<section class="about" id="clinica">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image reveal">
+        <div class="about-image-deco" aria-hidden="true"></div>
+        <img src="../images/clinic-interior.jpg" alt="Interior moderno da clínica dentária SORRIMED em Lisboa" />
+      </div>
+      <div class="about-content reveal">
+        <span class="section-eyebrow">A Clínica</span>
+        <h2 class="section-title">Tradição e inovação <em>ao serviço do seu sorriso</em></h2>
+        <p class="about-text">
+          Fundada há mais de duas décadas no coração de Lisboa, a SORRIMED nasceu da vontade
+          de criar uma clínica dentária onde a excelência clínica caminhasse lado a lado
+          com um atendimento verdadeiramente humano. Investimos continuamente em formação,
+          em tecnologia digital de diagnóstico e em materiais de primeira linha — para que
+          cada tratamento seja previsível, confortável e duradouro.
+        </p>
+        <p class="about-text" style="margin-top:-12px;">
+          Hoje, somos uma equipa multidisciplinar de médicos dentistas, higienistas e
+          assistentes que partilha a mesma filosofia: ouvir o paciente, explicar cada
+          passo e entregar resultados que se vêem — e se sentem — no dia a dia.
+        </p>
+
+        <div class="stats">
+          <div>
+            <div class="stat-num">+20<small>anos</small></div>
+            <div class="stat-label">De Experiência</div>
+          </div>
+          <div>
+            <div class="stat-num">12k<small>+</small></div>
+            <div class="stat-label">Pacientes Satisfeitos</div>
+          </div>
+          <div>
+            <div class="stat-num">9</div>
+            <div class="stat-label">Especialistas Dedicados</div>
+          </div>
+          <div>
+            <div class="stat-num">35k<small>+</small></div>
+            <div class="stat-label">Tratamentos Realizados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CONTACT ============== -->
+<section class="contact" id="contacto">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <span class="section-eyebrow">Estamos Aqui Para Si</span>
+        <h2 class="section-title">Marque a sua <em>consulta</em></h2>
+        <p class="section-sub">
+          Estamos a 5 minutos do Marquês. Ligue-nos, envie-nos uma mensagem ou preencha
+          o formulário — respondemos sempre no próprio dia.
+        </p>
+
+        <ul class="info-list">
+          <li class="info-item">
+            <div class="info-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="info-text-label">Morada</div>
+              <div class="info-text-value">Rua da Clínica, 25<br/>1050-001 Lisboa</div>
+            </div>
+          </li>
+          <li class="info-item">
+            <div class="info-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="info-text-label">Telefone</div>
+              <div class="info-text-value"><a href="tel:+351219538553">21 953 8553</a></div>
+            </div>
+          </li>
+          <li class="info-item">
+            <div class="info-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="info-text-label">Email</div>
+              <div class="info-text-value"><a href="mailto:marcar@sorrimed.pt">marcar@sorrimed.pt</a></div>
+            </div>
+          </li>
+          <li class="info-item">
+            <div class="info-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <div class="info-text-label">Horário</div>
+              <div class="info-text-value">Segunda a Sexta · 09h00 – 20h00<br/>Sábado · 09h00 – 13h00</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="form-card reveal">
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="name">Nome</label>
+              <input type="text" id="name" name="name" required autocomplete="name" placeholder="O seu nome" />
+            </div>
+            <div class="field">
+              <label for="phone">Telefone</label>
+              <input type="tel" id="phone" name="phone" required autocomplete="tel" placeholder="912 345 678" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="exemplo@email.com" />
+          </div>
+          <div class="field">
+            <label for="message">Mensagem</label>
+            <textarea id="message" name="message" placeholder="Conte-nos como podemos ajudar..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-gold form-submit">Enviar Pedido de Marcação</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo" aria-label="SORRIMED">
+          <img class="logo-icon" src="../images/logo-official@2x.png" alt="" />
+          <span class="logo-text">
+            <span class="logo-name" style="font-size:22px;">SORRI<b>MED</b></span>
+            <span class="logo-sub">Clínica Dentária</span>
+          </span>
+        </a>
+        <p>Mais de duas décadas a cuidar do sorriso dos lisboetas com a mesma paixão do primeiro dia.</p>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Clínica</h4>
+        <ul>
+          <li><a href="#clinica">Sobre nós</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#contacto">Marcar Consulta</a></li>
+          <li><a href="tel:+351219538553">21 953 8553</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Serviços</h4>
+        <ul>
+          <li><a href="#servicos">Implantes Dentários</a></li>
+          <li><a href="#servicos">Ortodontia</a></li>
+          <li><a href="#servicos">Estética Dentária</a></li>
+          <li><a href="#servicos">Branqueamento</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Siga-nos</h4>
+        <div class="socials">
+          <a href="#" class="social-link" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="WhatsApp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 SORRIMED — Clínica Dentária, Lda. Todos os direitos reservados.</div>
+      <div><a href="mailto:marcar@sorrimed.pt">marcar@sorrimed.pt</a> · <a href="tel:+351219538553">21 953 8553</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle?.addEventListener('click', () => {
+    const open = links.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  links?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    if (window.innerWidth <= 640) { links.classList.remove('is-open'); toggle.setAttribute('aria-expanded','false'); }
+  }));
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Form — non-submitting placeholder (no backend)
+  document.getElementById('contactForm')?.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const btn = ev.target.querySelector('button');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Pedido enviado — obrigada!';
+    btn.style.background = 'var(--teal-light)';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; ev.target.reset(); }, 3500);
+  });
+</script>
+</body>
+</html>
