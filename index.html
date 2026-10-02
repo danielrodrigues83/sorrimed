@@ -50,6 +50,8 @@
     nav {
       position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       width: 100%;
       background: #052E40;
       backdrop-filter: blur(10px);
@@ -58,6 +60,8 @@
       padding: 1rem 5%;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
       transition: all 0.3s ease;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
 
     .nav-container {
@@ -124,6 +128,16 @@
     .nav-cta:hover {
       background: var(--teal-dark) !important;
       transform: translateY(-1px);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: transparent;
+      color: var(--white);
+      font-size: 28px;
+      line-height: 1;
+      padding: 4px 8px;
+      cursor: pointer;
     }
 
     /* === HERO === */
@@ -949,6 +963,41 @@
 
       .nav-links {
         display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--teal-deep);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 16px 0;
+        border-top: 1px solid rgba(255,255,255,.08);
+        box-shadow: 0 10px 30px rgba(0,0,0,.25);
+        margin: 0;
+      }
+
+      .nav-links.is-open {
+        display: flex;
+      }
+
+      .nav-links li {
+        list-style: none;
+      }
+
+      .nav-links a {
+        padding: 12px 24px;
+        display: block;
+      }
+
+      .nav-links .nav-cta {
+        margin: 12px 24px 0;
+        align-self: stretch;
+        text-align: center;
+      }
+
+      .nav-toggle {
+        display: block;
       }
 
       .footer-grid {
@@ -990,12 +1039,13 @@
         <img src="images/logo-official.jpg" alt="SORRIMED" class="logo-icon">
         <span class="logo-text">SORRI<strong>MED</strong></span>
       </a>
-      <ul class="nav-links">
+      <ul class="nav-links" id="navLinks">
         <li><a href="#services">Serviços</a></li>
         <li><a href="#about">A Clínica</a></li>
         <li><a href="#contact">Contacto</a></li>
         <li><a href="#contact" class="nav-cta">Marcar Consulta</a></li>
       </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
     </div>
   </nav>
 
@@ -1237,6 +1287,22 @@
         nav.style.boxShadow = '0 2px 20px rgba(15, 59, 74, 0.06)';
       }
     });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle?.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', String(open));
+      navToggle.textContent = open ? '✕' : '☰';
+    });
+    navLinks?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      if (window.innerWidth <= 968) {
+        navLinks.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.textContent = '☰';
+      }
+    }));
 
     // Animate elements on scroll
     const observer = new IntersectionObserver((entries) => {
