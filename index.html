@@ -40,6 +40,7 @@
       line-height: 1.6;
       background: var(--white);
       overflow-x: hidden;
+      padding-top: 70px; /* offset for fixed nav */
     }
 
     .serif {
@@ -48,20 +49,16 @@
 
     /* === NAV === */
     nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
       width: 100%;
       background: #052E40;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      z-index: 1000;
-      padding: 1rem 5%;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-      transition: all 0.3s ease;
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
+      transition: box-shadow 0.3s ease;
+      z-index: 9999 !important;
+      will-change: transform;
     }
 
     .nav-container {
@@ -70,6 +67,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1rem 5%;
     }
 
     .logo {

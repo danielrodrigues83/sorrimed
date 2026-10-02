@@ -74,16 +74,15 @@
      ============================================================ */
   .nav {
     background: var(--teal-deep);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     width: 100%;
-    z-index: 1000;
+    z-index: 9999 !important;
     border-bottom: 1px solid rgba(255,255,255,.06);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+    will-change: transform;
   }
   .nav-inner {
     display: flex;
