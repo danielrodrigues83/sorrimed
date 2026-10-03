@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionário SORRIMED — Dados da Clínica</title>
+<meta name="description" content="Formulário interno para recolha de dados da clínica SORRIMED.">
+<style>
+  :root {
+    --primary: #1e40af;
+    --primary-hover: #1e3a8a;
+    --primary-light: #dbeafe;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --text-faint: #94a3b8;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --radius: 8px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .site-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: var(--shadow-sm);
+  }
+  .site-header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .site-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .site-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* Progress bar (sticky) */
+  .progress-bar {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    position: sticky;
+    top: 60px;
+    z-index: 49;
+  }
+  .progress-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-track {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #3b82f6);
+    border-radius: 999px;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .progress-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .progress-text strong { color: var(--text); }
+
+  /* Main */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px 120px;
+  }
+
+  /* Top config (destinatário) */
+  .config-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .config-card h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .config-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 12px;
+  }
+  .config-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) {
+    .config-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Accordion */
+  .accordion {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+  .accordion:hover { box-shadow: var(--shadow-md); }
+  .accordion.is-complete { border-left: 3px solid var(--success); }
+
+  .accordion-header {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--text);
+    transition: background 0.15s;
+  }
+  .accordion-header:hover { background: #f1f5f9; }
+  .accordion-header:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+  }
+
+  .accordion-num {
+    background: var(--primary);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .accordion.is-complete .accordion-num { background: var(--success); }
+
+  .accordion-title {
+    flex: 1;
+    font-weight: 600;
+  }
+  .accordion-status {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: 999px;
+  }
+  .accordion.is-complete .accordion-status {
+    background: var(--success-bg);
+    color: var(--success);
+    font-weight: 600;
+  }
+  .accordion-chevron {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .accordion.open .accordion-chevron { transform: rotate(180deg); }
+
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .accordion.open .accordion-body { max-height: 4000px; }
+  .accordion-content {
+    padding: 8px 20px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Form fields */
+  .field {
+    margin-top: 18px;
+  }
+  .field:first-child { margin-top: 12px; }
+  .field-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .field-label .opt {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .field-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0 0 6px;
+  }
+  .field-input,
+  .field-textarea,
+  .field-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: inherit;
+    background: white;
+    color: var(--text);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .field-textarea { resize: vertical; min-height: 80px; }
+  .field-input:focus,
+  .field-textarea:focus,
+  .field-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.12);
+  }
+  .field-input:invalid:not(:placeholder-shown),
+  .field-textarea:invalid:not(:placeholder-shown) {
+    border-color: var(--danger);
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) {
+    .field-row { grid-template-columns: 1fr; }
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+  .btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-primary:disabled {
+    background: var(--text-faint);
+    cursor: not-allowed;
+  }
+  .btn-secondary {
+    background: white;
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .btn-secondary:hover { background: #f8fafc; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--primary);
+    padding: 6px 10px;
+  }
+  .btn-ghost:hover { background: var(--primary-light); }
+  .btn-danger-ghost {
+    background: transparent;
+    color: var(--danger);
+    padding: 6px 10px;
+  }
+  .btn-danger-ghost:hover { background: #fee2e2; }
+
+  /* Action bar (sticky bottom) */
+  .action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    z-index: 40;
+  }
+  .action-bar-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .action-info {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal {
+    background: var(--card);
+    border-radius: 12px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(20px);
+    transition: transform 0.2s;
+  }
+  .modal-backdrop.is-open .modal { transform: translateY(0); }
+
+  .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .modal-close:hover { background: #f1f5f9; color: var(--text); }
+
+  .modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .modal-text {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+
+  .modal-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--success);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s;
+  }
+  .toast.is-show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Reset confirm */
+  .reset-confirm {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: #fee2e2;
+    color: var(--danger);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .reset-confirm.is-show { display: flex; }
+
+  /* Helper */
+  .helper-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--primary-light);
+    border-left: 3px solid var(--primary);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 20px;
+  }
+  .helper-text strong { color: var(--primary); }
+
+  @media (max-width: 600px) {
+    .site-title { font-size: 16px; }
+    .site-subtitle { display: none; }
+    .progress-bar { top: 56px; }
+    main { padding: 16px 14px 140px; }
+    .accordion-header { padding: 14px 16px; font-size: 15px; }
+    .accordion-content { padding: 8px 16px 20px; }
+    .modal-header, .modal-body, .modal-footer { padding: 14px 16px; }
+    .modal-text { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <div>
+      <h1 class="site-title">🦷 Questionário SORRIMED</h1>
+      <div class="site-subtitle">Recolha de dados para finalizar a landing page</div>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn btn-ghost" id="expandAllBtn" aria-label="Expandir tudo">Expandir tudo</button>
+      <div class="reset-confirm" id="resetConfirm">
+        <span>Tem a certeza?</span>
+        <button type="button" class="btn btn-danger-ghost" id="confirmResetBtn">Sim, limpar</button>
+        <button type="button" class="btn btn-ghost" id="cancelResetBtn">Cancelar</button>
+      </div>
+      <button type="button" class="btn btn-danger-ghost" id="resetBtn">Limpar tudo</button>
+    </div>
+  </div>
+</header>
+
+<div class="progress-bar" aria-label="Progresso do questionário">
+  <div class="progress-inner">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text"><strong id="progressCount">0</strong> / <span id="progressTotal">31</span> campos preenchidos</div>
+  </div>
+</div>
+
+<main>
+
+  <div class="helper-text">
+    <strong>ℹ️ Como usar:</strong> Preencha os campos abaixo. As respostas são guardadas automaticamente no seu browser (localStorage), pode fechar a página e voltar mais tarde. Quando terminar, clique em <strong>Gerar template para envio</strong> para obter o texto formatado pronto para enviar por WhatsApp, email ou copiar.
+  </div>
+
+  <!-- Destinatário config -->
+  <div class="config-card">
+    <h2>📨 Destinatário (para envio)</h2>
+    <p>Configure aqui o número de WhatsApp e email para quem serão enviados os dados. Pode deixar em branco se quiser só copiar.</p>
+    <div class="config-grid">
+      <div>
+        <label for="cfgWhatsapp" class="field-label">Número WhatsApp destino</label>
+        <input type="tel" id="cfgWhatsapp" class="field-input" placeholder="+351 91 234 5678" autocomplete="off">
+      </div>
+      <div>
+        <label for="cfgEmail" class="field-label">Email destino</label>
+        <input type="email" id="cfgEmail" class="field-input" placeholder="cliente@exemplo.pt" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <form id="mainForm" novalidate>
+
+    <!-- SECÇÃO 1 -->
+    <section class="accordion open" data-section="1">
+      <button type="button" class="accordion-header" aria-expanded="true">
+        <span class="accordion-num">1</span>
+        <span class="accordion-title">Dados da Clínica</span>
+        <span class="accordion-status" data-status>0 / 4</span>
+        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="field">
+            <label class="field-label" for="s1_nome">Nome comercial / oficial <span class="opt">obrigatório</span></label>
+            <input type="text" id="s1_nome" name="s1_nome" class="field-input" required placeholder="Ex: SORRIMED — Clínica Dentária, Lda.">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label" for="s1_nipc">NIPC / NIF <span class="opt">opcional</span></label>
+              <input type="text" id="s1_nipc" name="s1_nipc" class="field-input" placeholder="Ex: 512345678">
+            </div>
+            <div class="field">
+              <label class="field-label" for="s1_pais">País <span class="opt">obrigatório</span></label>
+              <select id="s1_pais" name="s1_pais" class="field-select" required>
+                <option value="">— Selecionar —</option>
+                <option value="Portugal">Portugal</option>
+                <option value="Brasil">Brasil</option>
+                <option value="Espanha">Espanha</option>
+                <option value="França">França</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="s1_morada">Morada completa <span class="opt">obrigatório</span></label>
+            <p class="field-hint">Rua, número, código postal, cidade. Para integrar com Google Maps.</p>
+            <textarea id="s1_morada" name="s1_morada" class="field-textarea" required rows="3" placeholder="Ex: Rua Augusta, nº 123, 1100-053 Lisboa"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 2 -->
+    <section class="accordion" data-section="2">
+      <button type="button" class="accordion-header" aria-expanded="false">
+        <span class="accordion-num">2</span>
+        <span class="accordion-title">Contactos</span>
+        <span class="accordion-status" data-status>0 / 7</span>
+        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label" for="s2_telefone">Telefone principal <span class="opt">obrigatório</span></label>
+              <input type="tel" id="s2_telefone" name="s2_telefone" class="field-input" required placeholder="+351 21 953 8553">
+            </div>
+            <div class="field">
+              <label class="field-label" for="s2_telefone_alt">Telefone alternativo / urgência <span class="opt">opcional</span></label>
+              <input type="tel" id="s2_telefone_alt" name="s2_telefone_alt" class="field-input" placeholder="+351 91 234 5678">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label" for="s2_email">Email geral <span class="opt">obrigatório</span></label>
+              <input type="email" id="s2_email" name="s2_email" class="field-input" required placeholder="info@sorrimed.pt">
+            </div>
+            <div class="field">
+              <label class="field-label" for="s2_website">Website <span class="opt">opcional</span></label>
+              <input type="url" id="s2_website" name="s2_website" class="field-input" placeholder="https://sorrimed.pt">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label" for="s2_facebook">Facebook <span class="opt">opcional</span></label>
+              <input type="url" id="s2_facebook" name="s2_facebook" class="field-input" placeholder="https://facebook.com/sorrimed">
+            </div>
+            <div class="field">
+              <label class="field-label" for="s2_instagram">Instagram <span class="opt">opcional</span></label>
+              <input type="url" id="s2_instagram" name="s2_instagram" class="field-input" placeholder="https://instagram.com/sorrimed">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="s2_linkedin">LinkedIn <span class="opt">opcional</span></label>
+            <input type="url" id="s2_linkedin" name="s2_linkedin" class="field-input" placeholder="https://linkedin.com/company/sorrimed">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 3 -->
+    <section class="accordion" data-section="3">
+      <button type="button" class="accordion-header" aria-expanded="false">
+        <span class="accordion-num">3</span>
+        <span class="accordion-title">Equipa</span>
+        <span class="accordion-status" data-status>0 / 4</span>
+        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label" for="s3_dentistas">Número de dentistas / profissionais <span class="opt">obrigatório</span></label>
+              <input type="number" id="s3_dentistas" name="s3_dentistas" class="field-input" required min="0" placeholder="Ex: 10">
+            </div>
+            <div class="field">
+              <label class="field-label" for="s3_auxiliares">Número de auxiliares / receção <span class="opt">opcional</span></label>
+              <input type="number" id="s3_auxiliares" name="s3_auxiliares" class="field-input" min="0" placeholder="Ex: 6">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="s3_nomes">Nomes e especialidades dos dentistas principais <span class="opt">opcional</span></label>
+            <p class="field-hint">Um por linha. Formato sugerido: "Dr. Nome — Especialidade".</p>
+            <textarea id="s3_nomes" name="s3_nomes" class="field-textarea" rows="4" placeholder="Dr. João Silva — Implantologia&#10;Dra. Maria Costa — Ortodontia&#10;Dr. Pedro Santos — Endodontia"></textarea>
+          </div>
+          <div class="field">
+            <label class="field-label" for="s3_fotos">Fotos da equipa <span class="opt">opcional</span></label>
+            <p class="field-hint">Múltiplas imagens permitidas. Apenas referência local — envios reais serão combinados por email/WhatsApp.</p>
+            <input type="file" id="s3_fotos" name="s3_fotos" class="field-input" multiple accept="image/*">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 4 -->
+    <section class="accordion" data-section="4">
+      <button type="button" class="accordion-header" aria-expanded="false">
+        <span class="accordion-num">4</span>
+        <span class="accordion-title">Serviços</span>
+        <span class="accordion-status" data-status>0 / 4</span>
+        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="field">
+            <label class="field-label" for="s4_servicos">Lista de serviços oferecidos <span class="opt">obrigatório</span></label>
+            <p class="field-hint">Um serviço por linha. Liste todos os que oferecem.</p>
+            <textarea id="s4_servicos" name="s4_servicos" class="field-textarea" required rows="6" placeholder="Implantes&#10;Ortodontia&#10;Estética Dentária&#10;Higiene Oral&#10;Odontologia Geral&#10;Cirurgia Oral"></textarea>
+          </div>
+          <div class="field">
+            <label class="field-label" for="s4_destaque">Serviços em destaque para a landing <span class="opt">opcional</span></label>
+            <p class="field-hint">Quais 3–6 serviços devem aparecer em destaque na home?</p>
+            <textarea id="s4_destaque" name="s4_destaque" class="field-textarea" rows="3" placeholder="Implantes&#10;Ortodontia invisível&#10;Estética Dentária"></textarea>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label" for="s4_preco">Preço médio por consulta / check-up <span class="opt">opcional</span></label>
+              <input type="text" id="s4_preco" name="s4_preco" class="field-input" placeholder="Ex: 40€ a 60€">
+            </div>
+            <div class="field">
+              <label class="field-label" for="s4_convencoes">Convenções / seguros <span class="opt">opcional</span></label>
+              <input type="text" id="s4_convencoes" name="s4_convencoes" class="field-input" placeholder="Ex: Multicare, AdvanceCare, SAMS">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 5 -->
+    <section class="accordion" data-section="5">
+      <button type="button" class="accordion-header" aria-expanded="false">
+        <span class="accordion-num">5</span>
+        <span class="accordion-title">Horários</span>
+        <span class="accordion-status" data-status>0 / 4</span>
+        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="field">
+            <label class="field-label" for="s5_semana">Segunda a sexta <span class="opt">obrigatório</span></label>
+            <input type="text" id="s5_semana" name="s5_semana" class="field-input" required placeholder="Ex: 09:00 - 20:00">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label" for="s5_sabado">Sábado <span class="opt">obrigatório</span></label>
+              <input type="text" id="s5_sabado" name="s5_sabado" class="field-input" required placeholder="Ex: 09:00 - 13:00">
+            </div>
+            <div class="field">
+              <label class="field-label" for="s5_domingo">Domingo <span class="opt">opcional</span></label>
+              <input type="text" id="s5_domingo" name="s5_domingo" class="field-input" placeholder="Ex: encerrado">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="s5_feriados">Feriados / exceções <span class="opt">opcional</span></label>
+            <input type="text" id="s5_feriados" name="s5_feriados" class="field-input" placeholder="Ex: Encerrados 24-26 Dez. Horário de verão jul-ago: 9-18h">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 6 -->
+    <section class="accordion" data-section="6">
+      <button type="button" class="accordion-header" aria-expanded="false">
+        <span class="accordion-num">6</span>
+        <span class="accordion-title">Testemunhos e Credibilidade</span>
+        <span class="accordion-status" data-status>0 / 4</span>
+        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label" for="s6_anos">Anos no mercado <span class="opt">obrigatório</span></label>
+              <input type="number" id="s6_anos" name="s6_anos" class="field-input" required min="0" placeholder="Ex: 22">
+            </div>
+            <div class="field">
+              <label class="field-label" for="s6_pacientes">Número aproximado de pacientes <span class="opt">opcional</span></label>
+              <input type="number" id="s6_pacientes" name="s6_pacientes" class="field-input" min="0" placeholder="Ex: 5000">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="s6_certificacoes">Certificações / acreditações <span class="opt">opcional</span></label>
+            <textarea id="s6_certificacoes" name="s6_certificacoes" class="field-textarea" rows="2" placeholder="Ex: ISO 9001, Invisalign Provider Diamond, Ordem dos Médicos Dentistas"></textarea>
+          </div>
+          <div class="field">
+            <label class="field-label" for="s6_depoimentos">Depoimentos de pacientes <span class="opt">opcional</span></label>
+            <p class="field-hint">Um por parágrafo. Formato: "Nome — 'Depoimento' — Paciente desde YYYY".</p>
+            <textarea id="s6_depoimentos" name="s6_depoimentos" class="field-textarea" rows="4" placeholder="Maria S. — 'Equipa excepcional, recomendo.' — Paciente desde 2019"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 7 -->
+    <section class="accordion" data-section="7">
+      <button type="button" class="accordion-header" aria-expanded="false">
+        <span class="accordion-num">7</span>
+        <span class="accordion-title">Textos e Voz da Marca</span>
+        <span class="accordion-status" data-status>0 / 4</span>
+        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="field">
+            <label class="field-label" for="s7_tom">Tom preferido <span class="opt">obrigatório</span></label>
+            <select id="s7_tom" name="s7_tom" class="field-select" required>
+              <option value="">— Selecionar —</option>
+              <option value="Formal/Profissional">Formal/Profissional</option>
+              <option value="Acolhedor/Familiar">Acolhedor/Familiar</option>
+              <option value="Moderno/Tecnológico">Moderno/Tecnológico</option>
+              <option value="Divertido/Lúdico">Divertido/Lúdico</option>
+              <option value="Premium/Exclusivo">Premium/Exclusivo</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label" for="s7_palavras">3 palavras que descrevem a clínica <span class="opt">obrigatório</span></label>
+            <input type="text" id="s7_palavras" name="s7_palavras" class="field-input" required placeholder="Ex: confiança, tecnologia, proximidade">
+          </div>
+          <div class="field">
+            <label class="field-label" for="s7_slogan">Frase-slogan <span class="opt">opcional</span></label>
+            <input type="text" id="s7_slogan" name="s7_slogan" class="field-input" placeholder="Ex: O seu sorriso, a nossa missão">
+          </div>
+          <div class="field">
+            <label class="field-label" for="s7_logo">Logo oficial em alta resolução <span class="opt">opcional</span></label>
+            <input type="file" id="s7_logo" name="s7_logo" class="field-input" accept="image/*,.svg,.pdf">
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </form>
+
+</main>
+
+<div class="action-bar">
+  <div class="action-bar-inner">
+    <div class="action-info">
+      💾 As respostas são guardadas automaticamente no seu browser.
+    </div>
+    <button type="button" class="btn btn-primary" id="generateBtn">
+      ✨ Gerar template para envio
+    </button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">📋 Template gerado</h2>
+      <button type="button" class="modal-close" id="modalClose" aria-label="Fechar">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin:0 0 12px; font-size:13px; color: var(--text-muted);">
+        Copie o texto abaixo, envie por WhatsApp, ou por email. O texto está formatado em secções.
+      </p>
+      <pre class="modal-text" id="modalText"></pre>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" id="copyBtn">📋 Copiar para área de transferência</button>
+      <button type="button" class="btn btn-primary" id="whatsappBtn" style="background:#16a34a;">💬 Enviar por WhatsApp</button>
+      <button type="button" class="btn btn-primary" id="emailBtn" style="background:#2563eb;">✉️ Enviar por Email</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copiado!</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const STORAGE_KEY = 'sorrimed_form_data_v1';
+  const CONFIG_KEY = 'sorrimed_form_config_v1';
+  const EXPAND_KEY = 'sorrimed_form_expand_v1';
+
+  // ----- Storage -----
+  const storage = {
+    load() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+      catch (e) { return {}; }
+    },
+    save(data) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+      catch (e) { console.warn('localStorage save failed', e); }
+    },
+    loadConfig() {
+      try { return JSON.parse(localStorage.getItem(CONFIG_KEY) || '{}'); }
+      catch (e) { return {}; }
+    },
+    saveConfig(cfg) {
+      try { localStorage.setItem(CONFIG_KEY, JSON.stringify(cfg)); }
+      catch (e) {}
+    },
+    clear() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    }
+  };
+
+  // ----- Accordion behavior -----
+  const accordions = document.querySelectorAll('.accordion');
+
+  // Restore expanded state
+  const expandState = (() => {
+    try { return JSON.parse(localStorage.getItem(EXPAND_KEY) || '{}'); }
+    catch (e) { return {}; }
+  })();
+  accordions.forEach((acc) => {
+    const n = acc.dataset.section;
+    if (expandState[n] === false) {
+      acc.classList.remove('open');
+      acc.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+    } else if (expandState[n] === true) {
+      acc.classList.add('open');
+      acc.querySelector('.accordion-header').setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  function saveExpandState() {
+    const state = {};
+    accordions.forEach(acc => {
+      state[acc.dataset.section] = acc.classList.contains('open');
+    });
+    try { localStorage.setItem(EXPAND_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  accordions.forEach(acc => {
+    const header = acc.querySelector('.accordion-header');
+    header.addEventListener('click', () => {
+      acc.classList.toggle('open');
+      header.setAttribute('aria-expanded', acc.classList.contains('open'));
+      saveExpandState();
+    });
+  });
+
+  // Expand/collapse all
+  const expandAllBtn = document.getElementById('expandAllBtn');
+  expandAllBtn.addEventListener('click', () => {
+    const allOpen = Array.from(accordions).every(a => a.classList.contains('open'));
+    accordions.forEach(acc => {
+      if (allOpen) {
+        acc.classList.remove('open');
+        acc.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+      } else {
+        acc.classList.add('open');
+        acc.querySelector('.accordion-header').setAttribute('aria-expanded', 'true');
+      }
+    });
+    expandAllBtn.textContent = allOpen ? 'Expandir tudo' : 'Fechar tudo';
+    saveExpandState();
+  });
+
+  // ----- Field management -----
+  const form = document.getElementById('mainForm');
+  const allFields = form.querySelectorAll('input, textarea, select');
+  const totalFields = allFields.length;
+
+  // Restore field values
+  const saved = storage.load();
+  allFields.forEach(f => {
+    if (saved[f.name] !== undefined && f.type !== 'file') {
+      f.value = saved[f.name];
+    }
+  });
+
+  // Restore config
+  const cfg = storage.loadConfig();
+  if (cfg.whatsapp) document.getElementById('cfgWhatsapp').value = cfg.whatsapp;
+  if (cfg.email) document.getElementById('cfgEmail').value = cfg.email;
+
+  // Save on input
+  allFields.forEach(f => {
+    f.addEventListener('input', () => {
+      const data = storage.load();
+      data[f.name] = f.value;
+      storage.save(data);
+      updateProgress();
+    });
+    f.addEventListener('change', () => {
+      const data = storage.load();
+      data[f.name] = f.value;
+      storage.save(data);
+      updateProgress();
+    });
+  });
+
+  document.getElementById('cfgWhatsapp').addEventListener('input', (e) => {
+    const c = storage.loadConfig();
+    c.whatsapp = e.target.value;
+    storage.saveConfig(c);
+  });
+  document.getElementById('cfgEmail').addEventListener('input', (e) => {
+    const c = storage.loadConfig();
+    c.email = e.target.value;
+    storage.saveConfig(c);
+  });
+
+  // ----- Progress -----
+  const progressFill = document.getElementById('progressFill');
+  const progressCount = document.getElementById('progressCount');
+  const progressTotal = document.getElementById('progressTotal');
+  progressTotal.textContent = totalFields;
+
+  function isFilled(f) {
+    if (f.type === 'file') return f.files && f.files.length > 0;
+    return f.value && f.value.trim() !== '';
+  }
+
+  function updateProgress() {
+    let filled = 0;
+    allFields.forEach(f => { if (isFilled(f)) filled++; });
+    const pct = (filled / totalFields) * 100;
+    progressFill.style.width = pct + '%';
+    progressCount.textContent = filled;
+
+    // Per-section
+    accordions.forEach(acc => {
+      const sectionFields = acc.querySelectorAll('input, textarea, select');
+      let sFilled = 0;
+      sectionFields.forEach(f => { if (isFilled(f)) sFilled++; });
+      const statusEl = acc.querySelector('[data-status]');
+      statusEl.textContent = sFilled + ' / ' + sectionFields.length;
+      const requiredFields = acc.querySelectorAll('[required]');
+      const allRequiredFilled = Array.from(requiredFields).every(f => isFilled(f));
+      if (allRequiredFilled && requiredFields.length > 0) {
+        acc.classList.add('is-complete');
+      } else {
+        acc.classList.remove('is-complete');
+      }
+    });
+  }
+  updateProgress();
+
+  // ----- Reset -----
+  const resetBtn = document.getElementById('resetBtn');
+  const resetConfirm = document.getElementById('resetConfirm');
+  const confirmResetBtn = document.getElementById('confirmResetBtn');
+  const cancelResetBtn = document.getElementById('cancelResetBtn');
+
+  resetBtn.addEventListener('click', () => {
+    resetConfirm.classList.add('is-show');
+    resetBtn.style.display = 'none';
+  });
+  cancelResetBtn.addEventListener('click', () => {
+    resetConfirm.classList.remove('is-show');
+    resetBtn.style.display = '';
+  });
+  confirmResetBtn.addEventListener('click', () => {
+    storage.clear();
+    allFields.forEach(f => {
+      if (f.type === 'file') f.value = '';
+      else f.value = '';
+    });
+    updateProgress();
+    resetConfirm.classList.remove('is-show');
+    resetBtn.style.display = '';
+    showToast('Formulário limpo');
+  });
+
+  // ----- Template generation -----
+  const sectionLabels = {
+    1: 'SECÇÃO 1 — DADOS DA CLÍNICA',
+    2: 'SECÇÃO 2 — CONTACTOS',
+    3: 'SECÇÃO 3 — EQUIPA',
+    4: 'SECÇÃO 4 — SERVIÇOS',
+    5: 'SECÇÃO 5 — HORÁRIOS',
+    6: 'SECÇÃO 6 — TESTEMUNHOS E CREDIBILIDADE',
+    7: 'SECÇÃO 7 — TEXTOS E VOZ DA MARCA'
+  };
+
+  const fieldLabels = {
+    s1_nome: 'Nome comercial / oficial',
+    s1_nipc: 'NIPC / NIF',
+    s1_pais: 'País',
+    s1_morada: 'Morada completa',
+    s2_telefone: 'Telefone principal',
+    s2_telefone_alt: 'Telefone alternativo / urgência',
+    s2_email: 'Email geral',
+    s2_website: 'Website',
+    s2_facebook: 'Facebook',
+    s2_instagram: 'Instagram',
+    s2_linkedin: 'LinkedIn',
+    s3_dentistas: 'Nº de dentistas / profissionais',
+    s3_auxiliares: 'Nº de auxiliares / receção',
+    s3_nomes: 'Nomes e especialidades dos dentistas',
+    s3_fotos: 'Fotos da equipa',
+    s4_servicos: 'Lista de serviços',
+    s4_destaque: 'Serviços em destaque',
+    s4_preco: 'Preço médio por consulta',
+    s4_convencoes: 'Convenções / seguros',
+    s5_semana: 'Segunda a sexta',
+    s5_sabado: 'Sábado',
+    s5_domingo: 'Domingo',
+    s5_feriados: 'Feriados / exceções',
+    s6_anos: 'Anos no mercado',
+    s6_pacientes: 'Nº aproximado de pacientes',
+    s6_certificacoes: 'Certificações / acreditações',
+    s6_depoimentos: 'Depoimentos de pacientes',
+    s7_tom: 'Tom preferido',
+    s7_palavras: '3 palavras que descrevem a clínica',
+    s7_slogan: 'Frase-slogan',
+    s7_logo: 'Logo oficial'
+  };
+
+  function formatDate(d) {
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return dd + '/' + mm + '/' + yyyy;
+  }
+
+  function getValue(name) {
+    const f = form.querySelector('[name="' + name + '"]');
+    if (!f) return '';
+    if (f.type === 'file') {
+      if (f.files && f.files.length > 0) {
+        return Array.from(f.files).map(x => x.name).join(', ');
+      }
+      return '';
+    }
+    return (f.value || '').trim();
+  }
+
+  function generateText() {
+    const now = new Date();
+    const data = storage.load();
+    const nomeClinica = data.s1_nome || 'SORRIMED';
+    let out = '';
+    out += '=== RESPOSTAS DO QUESTIONÁRIO — ' + nomeClinica.toUpperCase() + ' ===\n';
+    out += 'Data: ' + formatDate(now) + '\n';
+    out += 'Total de campos preenchidos: ' + progressCount.textContent + ' / ' + totalFields + '\n\n';
+
+    const fieldOrderBySection = {
+      1: ['s1_nome', 's1_nipc', 's1_morada', 's1_pais'],
+      2: ['s2_telefone', 's2_telefone_alt', 's2_email', 's2_website', 's2_facebook', 's2_instagram', 's2_linkedin'],
+      3: ['s3_dentistas', 's3_auxiliares', 's3_nomes', 's3_fotos'],
+      4: ['s4_servicos', 's4_destaque', 's4_preco', 's4_convencoes'],
+      5: ['s5_semana', 's5_sabado', 's5_domingo', 's5_feriados'],
+      6: ['s6_anos', 's6_pacientes', 's6_certificacoes', 's6_depoimentos'],
+      7: ['s7_tom', 's7_palavras', 's7_slogan', 's7_logo']
+    };
+
+    for (let s = 1; s <= 7; s++) {
+      out += sectionLabels[s] + '\n';
+      const fields = fieldOrderBySection[s];
+      fields.forEach(fname => {
+        const label = fieldLabels[fname];
+        const val = getValue(fname);
+        const isRequired = !!form.querySelector('[name="' + fname + '"]')?.required;
+        if (val) {
+          out += label + ': ' + val + '\n';
+        } else {
+          const marker = isRequired ? '[NÃO INFORMADO]' : '[—]';
+          out += label + ': ' + marker + '\n';
+        }
+      });
+      out += '\n';
+    }
+
+    out += '=== FIM DO QUESTIONÁRIO ===\n';
+    out += '\nEnviado via formulário interno SORRIMED.';
+    return out;
+  }
+
+  // ----- Modal -----
+  const modal = document.getElementById('modal');
+  const modalText = document.getElementById('modalText');
+  const modalClose = document.getElementById('modalClose');
+  const copyBtn = document.getElementById('copyBtn');
+  const whatsappBtn = document.getElementById('whatsappBtn');
+  const emailBtn = document.getElementById('emailBtn');
+  let currentText = '';
+
+  document.getElementById('generateBtn').addEventListener('click', () => {
+    currentText = generateText();
+    modalText.textContent = currentText;
+    modal.classList.add('is-open');
+  });
+
+  function closeModal() { modal.classList.remove('is-open'); }
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // Toast
+  const toast = document.getElementById('toast');
+  let toastTimer = null;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('is-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-show'), 2000);
+  }
+
+  // Copy
+  copyBtn.addEventListener('click', async () => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(currentText);
+      } else {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = currentText;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      showToast('✓ Copiado!');
+    } catch (e) {
+      showToast('Erro ao copiar');
+      console.error(e);
+    }
+  });
+
+  // WhatsApp
+  whatsappBtn.addEventListener('click', () => {
+    const number = (document.getElementById('cfgWhatsapp').value || '').replace(/[^\d+]/g, '');
+    const encoded = encodeURIComponent(currentText);
+    let url;
+    if (number && number.length >= 5) {
+      const clean = number.replace(/^\+/, '');
+      url = 'https://wa.me/' + clean + '?text=' + encoded;
+    } else {
+      url = 'https://wa.me/?text=' + encoded;
+    }
+    window.open(url, '_blank', 'noopener');
+  });
+
+  // Email
+  emailBtn.addEventListener('click', () => {
+    const to = document.getElementById('cfgEmail').value || '';
+    const subject = encodeURIComponent('Resposta questionário SORRIMED');
+    const body = encodeURIComponent(currentText);
+    let url = 'mailto:' + encodeURIComponent(to) + '?subject=' + subject + '&body=' + body;
+    window.location.href = url;
+  });
+
+  // ----- HTML5 validation on submit -----
+  form.addEventListener('submit', (e) => { e.preventDefault(); });
+
+  // Show validation messages
+  allFields.forEach(f => {
+    f.addEventListener('invalid', (e) => {
+      e.preventDefault();
+      // Open the accordion containing this field
+      const acc = f.closest('.accordion');
+      if (acc && !acc.classList.contains('open')) {
+        acc.classList.add('open');
+        acc.querySelector('.accordion-header').setAttribute('aria-expanded', 'true');
+        saveExpandState();
+      }
+      f.focus();
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>
